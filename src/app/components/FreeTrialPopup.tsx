@@ -10,19 +10,18 @@ interface FreeTrialPopupProps {
 
 export default function FreeTrialPopup({ isPopupOpen, setIsPopupOpen }: FreeTrialPopupProps) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsPopupOpen(true)
-    }, 4000)
-
-    const interval = setInterval(() => {
-      setIsPopupOpen(true)
-    }, 5 * 1000 + 1)
-
-    return () => {
-      clearTimeout(timer)
-      clearInterval(interval)
+    const hasSeenPopup = sessionStorage.getItem('hasSeenPopup')
+  
+    if (!hasSeenPopup) {
+      const timer = setTimeout(() => {
+        setIsPopupOpen(true)
+        sessionStorage.setItem('hasSeenPopup', 'true')
+      }, 4000)
+  
+      return () => clearTimeout(timer)
     }
   }, [setIsPopupOpen])
+  
 
   const closePopup = () => {
     setIsPopupOpen(false)
